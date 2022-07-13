@@ -2,8 +2,6 @@ function afficher_produit_panier () {
 
     let listDesProduitsJSON = localStorage.getItem("products");
     let listDesProduitsTableau = JSON.parse(listDesProduitsJSON);
-    let qte = 0;
-    let prix = 0;
 
     if (localStorage.length > 0){
     listDesProduitsTableau.forEach(element => {
@@ -15,6 +13,7 @@ function afficher_produit_panier () {
         let baliseP2 = document.createElement("p");
         let baliseSupr = document.createElement("deleteItem")
         let baliseDiv1 = document.createElement("div");
+        let baliseDiv12 = document.createElement("div");
         let baliseDiv2 = document.createElement("div");
         let baliseDiv3 = document.createElement("div");
         let baliseDiv4 = document.createElement("div");
@@ -30,7 +29,8 @@ function afficher_produit_panier () {
         baliseInput.value = element.quantite;
         baliseInput.classList.add("itemQuantity");
 
-        baliseDiv1.classList.add("cart__item__img")
+        baliseDiv1.classList.add("cart__item__img");
+        baliseDiv12.classList.add("cart__item__content");
         baliseDiv2.classList.add("cart__item__content__description")
         baliseDiv3.classList.add("cart__item__content__settings");
         baliseDiv4.classList.add("cart__item__content__settings__quantity");
@@ -50,8 +50,16 @@ function afficher_produit_panier () {
         baliseSupr.innerText = element.id;
         baliseP4.innerText = "Supprimer";
         
-        baliseDiv3.appendChild(baliseDiv5)
-        baliseDiv3.appendChild(baliseDiv4)
+        baliseArticle.appendChild(baliseDiv12);
+        baliseArticle.appendChild(baliseDiv1);
+        baliseDiv1.appendChild(baliseImg)
+        baliseDiv12.appendChild(baliseDiv2);
+        baliseDiv12.appendChild(baliseDiv3);
+        baliseDiv2.appendChild(baliseP);
+        baliseDiv2.appendChild(baliseP2);
+        baliseDiv2.appendChild(baliseH2);
+        baliseDiv3.appendChild(baliseDiv5);
+        baliseDiv3.appendChild(baliseDiv4);
         baliseDiv4.appendChild(baliseP3);
         baliseDiv4.appendChild(baliseInput);
         baliseDiv5.appendChild(baliseP4);

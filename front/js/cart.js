@@ -1,7 +1,19 @@
-function afficher_produit_panier () {
+const fetchProduit = async () => {
+    await fetch(`http://localhost:3000/api/products`)
+    .then((res) => res.json())
+    .then((promise) => {
+        produitData = promise;
+    });  
+};
+
+const afficher_produit_panier = async () => {
+    await fetchProduit();
 
     let listDesProduitsJSON = localStorage.getItem("products");
     let listDesProduitsTableau = JSON.parse(listDesProduitsJSON);
+    let qte = 0;
+    let prix = 0;
+    let prix2 = 0;
 
     if (localStorage.length > 0){
     listDesProduitsTableau.forEach(element => {
@@ -35,21 +47,20 @@ function afficher_produit_panier () {
         baliseDiv3.classList.add("cart__item__content__settings");
         baliseDiv4.classList.add("cart__item__content__settings__quantity");
         baliseDiv5.classList.add("cart__item__content__settings__delete");
-        baliseP4.classList.add("deleteItem")
-        
+        baliseP4.classList.add("deleteItem");
+
         baliseArticle.dataset.id = element.id;
         baliseArticle.dataset.color = element.color;
         baliseArticle.classList.add("cart__item");
 
-        baliseImg.src = element.imageUrl;
-        baliseImg.alt = element.altTxt;
-        baliseH2.innerText = element.name;
+       
         baliseP.innerText = element.color;
-        baliseP2.innerText = element.price;
+        
         baliseP3.innerText = "Qté :";
         baliseSupr.innerText = element.id;
+        console.log(baliseSupr);
         baliseP4.innerText = "Supprimer";
-        
+
         baliseArticle.appendChild(baliseDiv12);
         baliseArticle.appendChild(baliseDiv1);
         baliseDiv1.appendChild(baliseImg)
@@ -66,58 +77,56 @@ function afficher_produit_panier () {
 
         let section_article = document.getElementById("cart__items");
         section_article.appendChild(baliseArticle);
-  
-        qte = qte + parseFloat(element.quantite);
-        prix = prix + parseFloat(element.price);
 
+        qte = qte + parseFloat(element.quantite);
         document.getElementById("totalQuantity").innerText = qte;
-        document.getElementById("totalPrice").innerText = prix;  
-          
-        document.getElementById("deleteItem").addEventListener("click", (e) => {
-            e.preventDefault();
-            supprimer_produit (id);
+       
+        let unId = element.id;
+        let quantite2 = element.quantite
+   
+        produitData.forEach(element => {     
+            if(element._id === unId){
+                prix2 = parseFloat(element.price) * quantite2;
+                prix = prix + prix2;
+                document.getElementById("totalPrice").innerText = prix;
+
+                baliseP2.innerText = element.price;    
+                baliseImg.src = element.imageUrl;      
+                baliseImg.alt = element.altTxt;
+                baliseH2.innerText = element.name;                 
+            }
         })
-        
+
+        document.getElementById("cart__items").addEventListener("click", function(){
+            for (i = 0; i < localStorage.length; i++){         
+                if (unId === localStorage.id)  {
+                    localStorage.removeItem();
+                    console.log("test");
+                }
+        }})
+
+
     })}
     else {
         alert ("Votre panier est vide");
     }
-
-
-    
-function supprimer_produit (id) {
-        listDesProduitsTableau.removeItem(id);
-    }
-
-        // if (localStorage.length > 0){
-        //     listDesProduitsTableau.forEach(element => {
-        //         document.getElementById("totalQuantity").innerText = element.quantite;
-        //         document.getElementById("totalPrice").innerText = element.color;
-        //     })
-        // }
-        // else {
-        //     alert ("Votre panier est vide");
-        // }
-
-
-
-    // for (var i=0; i <= localStorage.length; i++){
-    //     if (localStorage.length > 0){
-    //         document.getElementById("totalQuantity").innerText = element.quantite;
-    //     }
-    //     else {
-    //         alert ("Votre panier est vide");
-    //     }
-    // }
-
-    // Object.keys(localStorage).forEach(element => {
-    //         document.getElementById("totalQuantity").innerText = element.quantite;
-    //         document.getElementById("totalPrice").innerText = element.color;
-    //     });    
-
-
-
 }
+
+        // document.getElementById("deleteItem").addEventListener("click", (e) => {
+        //     e.preventDefault();
+        //     supprimer_produit(id);
+        //     })
+
+
+function supprimer_produit (unId) {
+    for (i = 0; i < localStorage.length; i++){
+        if (unId === localStorage.id)  {
+            localStorage.removeItem(unId);
+        }
+    }
+}
+
+
 
 afficher_produit_panier();
 

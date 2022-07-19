@@ -23,7 +23,6 @@ const afficher_produit_panier = async () => {
         let baliseH2 = document.createElement("h2");
         let baliseP = document.createElement("p");
         let baliseP2 = document.createElement("p");
-        let baliseSupr = document.createElement("deleteItem")
         let baliseDiv1 = document.createElement("div");
         let baliseDiv12 = document.createElement("div");
         let baliseDiv2 = document.createElement("div");
@@ -52,15 +51,11 @@ const afficher_produit_panier = async () => {
         baliseArticle.dataset.id = element.id;
         baliseArticle.dataset.color = element.color;
         baliseArticle.classList.add("cart__item");
-
-       
+ 
         baliseP.innerText = element.color;
-        
         baliseP3.innerText = "Qté :";
-        baliseSupr.innerText = element.id;
-        console.log(baliseSupr);
         baliseP4.innerText = "Supprimer";
-
+        
         baliseArticle.appendChild(baliseDiv12);
         baliseArticle.appendChild(baliseDiv1);
         baliseDiv1.appendChild(baliseImg)
@@ -81,7 +76,8 @@ const afficher_produit_panier = async () => {
         qte = qte + parseFloat(element.quantite);
         document.getElementById("totalQuantity").innerText = qte;
        
-        let unId = element.id;
+        let unId = element.id;       
+        baliseP4.value = unId;
         let quantite2 = element.quantite
    
         produitData.forEach(element => {     
@@ -97,35 +93,27 @@ const afficher_produit_panier = async () => {
             }
         })
 
-        document.getElementById("cart__items").addEventListener("click", function(){
-            for (i = 0; i < localStorage.length; i++){         
-                if (unId === localStorage.id)  {
-                    localStorage.removeItem();
-                    console.log("test");
-                }
-        }})
-
-
+        document.addEventListener('click', function(e) {
+            var target = e.target;
+            if(target.value === unId) {
+                let confirmation = confirm ("Voulez vous supprimer l'article du panier ?");
+                if (confirmation === true){
+                var products = localStorage.getItem('products');
+                products = JSON.parse(products);
+                products.splice(products, 1);
+                localStorage.setItem('products', JSON.stringify(products));
+                }}
+            }         
+        );
     })}
     else {
         alert ("Votre panier est vide");
     }
 }
 
-        // document.getElementById("deleteItem").addEventListener("click", (e) => {
-        //     e.preventDefault();
-        //     supprimer_produit(id);
-        //     })
+function modifier_text() {
 
-
-function supprimer_produit (unId) {
-    for (i = 0; i < localStorage.length; i++){
-        if (unId === localStorage.id)  {
-            localStorage.removeItem(unId);
-        }
-    }
-}
-
+  }
 
 
 afficher_produit_panier();

@@ -14,6 +14,10 @@ const afficher_produit_panier = async () => {
     let qte = 0;
     let prix = 0;
     let prix2 = 0;
+    let section_article = document.getElementById("cart__items");
+    section_article.innerText = "";
+    document.getElementById("totalQuantity").innerText = 0;
+    document.getElementById("totalPrice").innerText = 0;
 
     if (localStorage.length > 0){
     listDesProduitsTableau.forEach(element => {
@@ -56,21 +60,21 @@ const afficher_produit_panier = async () => {
         baliseP3.innerText = "Qté :";
         baliseP4.innerText = "Supprimer";
         
-        baliseArticle.appendChild(baliseDiv12);
-        baliseArticle.appendChild(baliseDiv1);
-        baliseDiv1.appendChild(baliseImg)
-        baliseDiv12.appendChild(baliseDiv2);
-        baliseDiv12.appendChild(baliseDiv3);
-        baliseDiv2.appendChild(baliseP);
-        baliseDiv2.appendChild(baliseP2);
-        baliseDiv2.appendChild(baliseH2);
-        baliseDiv3.appendChild(baliseDiv5);
-        baliseDiv3.appendChild(baliseDiv4);
-        baliseDiv4.appendChild(baliseP3);
-        baliseDiv4.appendChild(baliseInput);
         baliseDiv5.appendChild(baliseP4);
+        baliseDiv4.appendChild(baliseInput);
+        baliseDiv4.appendChild(baliseP3);  
+        baliseDiv3.appendChild(baliseDiv4);
+        baliseDiv3.appendChild(baliseDiv5);
+        baliseDiv2.appendChild(baliseH2);
+        baliseDiv2.appendChild(baliseP2);
+        baliseDiv2.appendChild(baliseP);
+        baliseDiv12.appendChild(baliseDiv3);
+        baliseDiv12.appendChild(baliseDiv2);
+        baliseDiv1.appendChild(baliseImg)
+        baliseArticle.appendChild(baliseDiv1);
+        baliseArticle.appendChild(baliseDiv12);
 
-        let section_article = document.getElementById("cart__items");
+
         section_article.appendChild(baliseArticle);
 
         qte = qte + parseFloat(element.quantite);
@@ -93,18 +97,70 @@ const afficher_produit_panier = async () => {
             }
         })
 
-        document.addEventListener('click', function(e) {
-            var target = e.target;
-            if(target.value === unId) {
+
+        const deleteBtns = document.querySelectorAll('.deleteItem');
+        deleteBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
                 let confirmation = confirm ("Voulez vous supprimer l'article du panier ?");
-                if (confirmation === true){
+                        if (confirmation === true){
+                        var products = localStorage.getItem('products');
+                        products = JSON.parse(products);
+                        const articleToRemove = btn.closest('article');
+                        const idProductToChange = articleToRemove.getAttribute('data-id');
+                        const colorProductToChange = articleToRemove.getAttribute('data-color');
+                        let produitFinal = [];
+                        products.forEach(element =>{
+                            if(element.id == idProductToChange && element.color == colorProductToChange){
+                                articleToRemove.remove();
+                            }
+                            else {
+                                produitFinal.push(element);
+                            }
+                        })                 
+                        localStorage.setItem('products', JSON.stringify(produitFinal));
+                        afficher_produit_panier();
+                    }             
+            })
+        });
+
+        const quantityInputs = document.querySelectorAll('.itemQuantity');
+        quantityInputs.forEach(btn => {
+            btn.addEventListener('change', () => {
                 var products = localStorage.getItem('products');
                 products = JSON.parse(products);
-                products.splice(products, 1);
-                localStorage.setItem('products', JSON.stringify(products));
-                }}
-            }         
-        );
+                const articleToRemove = btn.closest('article');
+                const idProductToChange = articleToRemove.getAttribute('data-id');
+                const colorProductToChange = articleToRemove.getAttribute('data-color');
+                let produitFinal = [];
+                products.forEach(element =>{
+                    if(element.id == idProductToChange && element.color == colorProductToChange){
+                       if(btn.value < 0){
+                        produitFinal.push(element);
+                        alert("Vous ne pouvez pas avoir une quantité inférieur à 0")                        
+                       }
+                       else {
+                        if(btn.value > 0){
+                            element.quantite = btn.value;
+                            produitFinal.push(element);
+                        }}                   
+                    }  
+                    else {
+                        produitFinal.push(element);
+                    }            
+                })                 
+                localStorage.setItem('products', JSON.stringify(produitFinal));
+                afficher_produit_panier();
+            })
+        })
+
+
+
+
+
+
+
+
+
     })}
     else {
         alert ("Votre panier est vide");

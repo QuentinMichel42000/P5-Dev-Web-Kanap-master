@@ -60,17 +60,32 @@ const afficher_produit_panier = async () => {
         baliseP3.innerText = "Qté :";
         baliseP4.innerText = "Supprimer";
         
-        baliseDiv5.appendChild(baliseP4);
+        // baliseDiv5.appendChild(baliseP4);
+        // baliseDiv4.appendChild(baliseInput);
+        // baliseDiv4.appendChild(baliseP3);  
+        // baliseDiv3.appendChild(baliseDiv4);
+        // baliseDiv3.appendChild(baliseDiv5);
+        // baliseDiv2.appendChild(baliseH2);
+        // baliseDiv2.appendChild(baliseP2);
+        // baliseDiv2.appendChild(baliseP);
+        // baliseDiv12.appendChild(baliseDiv3);
+        // baliseDiv12.appendChild(baliseDiv2);
+        // baliseDiv1.appendChild(baliseImg)
+        // baliseArticle.appendChild(baliseDiv1);
+        // baliseArticle.appendChild(baliseDiv12);
+
+
+        baliseDiv2.appendChild(baliseH2)
+        baliseDiv2.appendChild(baliseP)
+        baliseDiv2.appendChild(baliseP2)
+        baliseDiv4.appendChild(baliseP3);
         baliseDiv4.appendChild(baliseInput);
-        baliseDiv4.appendChild(baliseP3);  
+        baliseDiv5.appendChild(baliseP4);
         baliseDiv3.appendChild(baliseDiv4);
         baliseDiv3.appendChild(baliseDiv5);
-        baliseDiv2.appendChild(baliseH2);
-        baliseDiv2.appendChild(baliseP2);
-        baliseDiv2.appendChild(baliseP);
+        baliseDiv1.appendChild(baliseImg);
+        baliseDiv12.appendChild(baliseDiv2)
         baliseDiv12.appendChild(baliseDiv3);
-        baliseDiv12.appendChild(baliseDiv2);
-        baliseDiv1.appendChild(baliseImg)
         baliseArticle.appendChild(baliseDiv1);
         baliseArticle.appendChild(baliseDiv12);
 

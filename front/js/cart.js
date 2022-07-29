@@ -256,26 +256,41 @@ const afficher_produit_panier = async () => {
 
     const order = document.getElementById("order");
 
-    order.addEventListener('submit', (e) => {
+    order.addEventListener('click', (e) => {
         e.preventDefault();
-        window.Location.href = "./confirmation.html";
     
         let commandeId = [];
 
+        let listDesProduitsJSON = localStorage.getItem("products");
+        let listDesProduitsTableau = JSON.parse(listDesProduitsJSON);
         listDesProduitsTableau.forEach((commande) =>{
-            commandeId.push(commande._id);
+            commandeId.push(commande.id);
         })
         
         const data = {
             contact:{
                 firstName : valuePrenom,
                 lastName : valueNom,
-                adresse : valueAdesse,
+                address : valueAdesse,
                 city : valueVille,
                 email : valueEmail,
             },
         products: commandeId,
         };
+
+        const submitCommande = async () => {
+            await fetch(`http://localhost:3000/api/products/order`,{
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),           
+            })
+            .then((res) => res.json())
+            .then((promise) => {
+                window.location.href = "./confirmation.html?orderId="+promise.orderId;
+            });  
+        };
+        submitCommande();
+
     })
     
 
